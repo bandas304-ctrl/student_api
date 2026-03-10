@@ -69,7 +69,24 @@ def signup():
         cursor.close()
         conn.close()
 
+# -----------------------------
+# Admin Data Retrieval
+# -----------------------------
 
+@app.route("/api/courses", methods=["GET"])
+def get_courses():
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    try:
+        cursor.execute("SELECT id, code, name, credits FROM courses ORDER BY name")
+        data = cursor.fetchall()
+        return jsonify(data)
+    except Exception as e:
+        print(f"Error fetching courses: {e}")
+        return jsonify([]), 500
+    finally:
+        cursor.close()
+        conn.close()
 
 @app.route("/api/students", methods=["GET"])
 def get_students():
